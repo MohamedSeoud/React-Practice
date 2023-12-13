@@ -1,5 +1,7 @@
 import { useState } from "react"
 import Button from "../components/Button"
+import { FaRegStar, FaStar } from "react-icons/fa";
+
 import FormComponent, { UserData } from "../components/FormComponent"
 import ItemsContainer, { User } from "../components/ItemsContainer"
 
@@ -24,25 +26,45 @@ function Home() {
   const onAddUser=(item:UserData)=>{
     setNewItems((cur)=>[...cur,{name:item.name,image:item.image,budget:100,description:''}])
   }
+  const[starHover,setStarHover]= useState<number>(0);
+  const[starSelected,setStarSelected]= useState<number>(0);
+
 
   return (
     <div className=' text-black mx-auto h-screen  sm:top-0 relative py-4  grid lg:grid-cols-2 grid-cols-1'>
 
 
-      <div  className=" col-span-1 bg-orange-50 flex justify-center flex-col sm:px-12 px-2 h-screen items-center">
+      <div  className=" col-span-1 bg-orange-50 flex justify-center flex-col cur sm:px-12 px-2 h-screen items-center">
         <ItemsContainer items={NewItems}/>
         {showForm  && <FormComponent onSubmitForm={onAddUser}/>}
         <Button name={showForm?"Close":"ShowForm"} onClick={()=>setShowForm((cur)=>!cur)} type="button"/>
       </div>
 
-        <div  className=" col-span-1 bg-orange-50">
-          
-          xxxx
+        <div  className=" col-span-1 flex justify-center items-center bg-orange-50">
+          <div className=" flex flex-row gap-">
+            
+          {Array.from({length:10},(_,i)=>
+          {
+            return(
+            <span  key={i} onMouseEnter={()=>setStarHover(i+1)} onMouseLeave={()=>setStarHover(0)} onClick={()=>setStarSelected(i+1)}>
+             { (starHover >= i+1) || (starSelected as number >= i+1) ?
+             <FaStar size='2rem' color='#eab308' cursor='pointer'/>
+             :
+             <FaRegStar size='2rem' color='#eab308' cursor='pointer' />
+             }
+            </span>
+            )
+          })}
+          <p className=" text-2xl font-bold px-2">{starHover || starSelected}</p>
+
+
+          </div>
+
         </div>
 
 
 
-      
+
     </div>
   )
 }
